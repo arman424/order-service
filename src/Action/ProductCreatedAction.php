@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Action;
 
@@ -7,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Shared\Bundle\DTO\PublishedDTOInterface;
 use Symfony\Component\Uid\Uuid;
 
-class ProductCreatedAction
+final class ProductCreatedAction
 {
     public function __construct(private EntityManagerInterface $em) {}
 

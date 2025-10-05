@@ -14,7 +14,6 @@ class Order
     #[ORM\Column(type: 'uuid')]
     private Uuid $id;
 
-    // store reference to product id (UUID) and a snapshot of its data
     #[ORM\Column(type: 'uuid')]
     private Uuid $productId;
 
@@ -41,28 +40,79 @@ class Order
         $this->id = $id;
     }
 
-    public function getId(): Uuid { return $this->id; }
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
 
-    public function getProductId(): Uuid { return $this->productId; }
-    public function setProductId(Uuid $productId): void { $this->productId = $productId; }
+    public function getProductId(): Uuid
+    {
+        return $this->productId;
+    }
 
-    public function getProductName(): string { return $this->productName; }
-    public function setProductName(string $name): void { $this->productName = $name; }
+    public function setProductId(Uuid $productId): void
+    {
+        $this->productId = $productId;
+    }
 
-    public function getProductPrice(): int { return $this->productPrice; }
-    public function setProductPrice(int $price): void { $this->productPrice = $price; }
+    public function getProductName(): string
+    {
+        return $this->productName;
+    }
+    public function setProductName(string $name): void
+    {
+        $this->productName = $name;
+    }
 
-    public function getProductAvailableQuantityAtOrder(): int { return $this->productAvailableQuantityAtOrder; }
-    public function setProductAvailableQuantityAtOrder(int $q): void { $this->productAvailableQuantityAtOrder = $q; }
+    public function getProductPrice(): int
+    {
+        return $this->productPrice;
+    }
 
-    public function getCustomerName(): string { return $this->customerName; }
-    public function setCustomerName(string $c): void { $this->customerName = $c; }
+    public function setProductPrice(int $price): void
+    {
+        $this->productPrice = $price;
+    }
 
-    public function getQuantityOrdered(): int { return $this->quantityOrdered; }
-    public function setQuantityOrdered(int $q): void { $this->quantityOrdered = $q; }
+    public function getProductAvailableQuantityAtOrder(): int
+    {
+        return $this->productAvailableQuantityAtOrder;
+    }
 
-    public function getStatus(): string { return $this->status; }
-    public function setStatus(string $s): void { $this->status = $s; }
+    public function setProductAvailableQuantityAtOrder(int $quantity): void
+    {
+        $this->productAvailableQuantityAtOrder = $quantity;
+    }
+
+    public function getCustomerName(): string
+    {
+        return $this->customerName;
+    }
+
+    public function setCustomerName(string $customerName): void
+    {
+        $this->customerName = $customerName;
+    }
+
+    public function getQuantityOrdered(): int
+    {
+        return $this->quantityOrdered;
+    }
+
+    public function setQuantityOrdered(int $quantityOrdered): void
+    {
+        $this->quantityOrdered = $quantityOrdered;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): void
+    {
+        $this->status = $status;
+    }
 
     public function toArray(): array
     {

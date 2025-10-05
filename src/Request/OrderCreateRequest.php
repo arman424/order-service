@@ -5,7 +5,7 @@ namespace App\Request;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class OrderCreateRequest
+final class OrderCreateRequest
 {
     #[Assert\NotBlank]
     #[Assert\Uuid]
