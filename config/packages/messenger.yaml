@@ -1,11 +1,24 @@
 framework:
   messenger:
     transports:
-      product_transport:
+      order_events:
         dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
         serializer: messenger.transport.symfony_serializer
         options:
+          exchange:
+            name: order_exchange_direct
+            type: direct
+          queues: {}
+
+      product_events:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+        serializer: messenger.transport.symfony_serializer
+        options:
+          exchange:
+            name: product_exchange_direct
+            type: direct
           queues:
-            product_queue: ~
+            order_service_queue: ~
+
     routing:
-      Shared\Bundle\Messaging\ProductMessage: product_transport
+      Shared\Bundle\Messaging\OrderMessage: order_events

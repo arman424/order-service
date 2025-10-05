@@ -21,9 +21,6 @@ class Product extends MappedProduct
 
     public function setProductId(Uuid|string $productId): void
     {
-        if (is_string($productId)) {
-            $productId = Uuid::fromString($productId);
-        }
-        $this->productId = $productId;
+        $this->productId = $productId instanceof Uuid ? $productId : Uuid::fromString($productId);
     }
 }

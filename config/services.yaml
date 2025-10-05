@@ -32,10 +32,9 @@ services:
         autoconfigure: true
         public: true
 
-    App\Messenger\ProductMessageHandler:
-        tags: [ 'messenger.message_handler' ]
-        autowire: true
-        autoconfigure: true
+    App\MessageHandler\:
+        resource: '../src/MessageHandler'
+        tags: ['messenger.message_handler']
 
 imports:
     - { resource: '../vendor/shared/shared-bundle/src/Resources/config/services.yaml' }

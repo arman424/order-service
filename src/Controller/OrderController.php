@@ -16,8 +16,8 @@ class OrderController extends AbstractController
 {
     public function __construct(
         private OrderCreateAction $orderCreateAction,
-        private OrderGetAction $orderGetAction,
-        private OrderListAction $orderListAction
+        private OrderListAction $orderListAction,
+        private OrderGetAction $orderGetAction
     ) {}
 
     #[Route('/orders', methods: ['POST'])]
@@ -33,6 +33,8 @@ class OrderController extends AbstractController
             return $this->json(['errors' => $errors], 422);
         } catch (\InvalidArgumentException $e) {
             return $this->json(['error' => $e->getMessage()], 400);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Internal Server Error'], 500);
         }
 
         return $this->json($order->toArray(), 201);

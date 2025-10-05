@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace App\Action;
 
-use App\DTO\OrderDTO;
 use App\Request\OrderCreateRequest;
 use App\Entity\Order;
 use App\Entity\Product;
 use App\Service\OrderPublisher;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Messenger\Exception\ValidationFailedException;
+use Exception;
+use Shared\Bundle\DTO\OrderReservationDTO;
+use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -24,6 +25,7 @@ final class OrderCreateAction
     /**
      * @param string $orderData JSON string from request
      * @return Order
+     * @throws Exception
      */
     public function __invoke(string $orderData): Order
     {
@@ -35,38 +37,32 @@ final class OrderCreateAction
             throw new ValidationFailedException($request, $errors);
         }
 
-        // 1. Find product locally
-        $product = $this->em->getRepository(Product::class)->find($request->productId);
+        $product = $this->em->getRepository(Product::class)->findOneBy(['productId' => $request->productId]);
         if (!$product) {
             throw new \InvalidArgumentException('Product not found');
         }
 
-        // 2. Check stock
         if ($product->getQuantity() < $request->quantityOrdered) {
             throw new \InvalidArgumentException('Insufficient product quantity');
         }
 
-        // 3. Decrement stock
-        $product->setQuantity($product->getQuantity() - $request->quantityOrdered);
-
-        // 4. Create order entity
         $order = new Order(Uuid::v4());
-        $order->setProductId($product->getId());
+        $order->setProductId($product->getProductId());
         $order->setProductName($product->getName());
-        $order->setProductPrice((float) $product->getPrice());
-        $order->setProductAvailableQuantityAtOrder($product->getQuantity() + $request->quantityOrdered); // snapshot before deduction
+        $order->setProductPrice((int)$product->getPrice());
+        $order->setProductAvailableQuantityAtOrder($product->getQuantity());
         $order->setCustomerName($request->customerName);
         $order->setQuantityOrdered($request->quantityOrdered);
         $order->setStatus('Processing');
 
-        // 5. Save
-        $this->em->persist($product);
         $this->em->persist($order);
         $this->em->flush();
 
-        // 6. Publish event
-        $dto = OrderDTO::fromEntity($order);
-        $this->publisher->publish($dto);
+        $this->publisher->publish(OrderReservationDTO::init([
+            'orderId' => $order->getId(),
+            'productId' => $order->getProductId(),
+            'quantity' => $order->getQuantityOrdered()
+        ]));
 
         return $order;
     }
@@ -74,9 +70,9 @@ final class OrderCreateAction
     private function mapRequest(array $orderData): OrderCreateRequest
     {
         $request = new OrderCreateRequest();
-        $request->productId = $orderData['productId'] ?? null;
+        $request->productId = $orderData['productId'];
+        $request->quantityOrdered = $orderData['quantityOrdered'];
         $request->customerName = $orderData['customerName'] ?? null;
-        $request->quantityOrdered = $orderData['quantityOrdered'] ?? null;
 
         return $request;
     }

@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace App\DTO;
 
 use App\Entity\Order;
-use JsonSerializable;
 
-final class OrderDTO implements JsonSerializable
+final class OrderDTO
 {
     public string $orderId;
     public array $product;
@@ -17,6 +16,7 @@ final class OrderDTO implements JsonSerializable
     public static function fromEntity(Order $order): self
     {
         $dto = new self();
+
         $dto->orderId = (string)$order->getId();
         $dto->product = [
             'id' => (string)$order->getProductId(),
@@ -27,10 +27,35 @@ final class OrderDTO implements JsonSerializable
         $dto->customerName = $order->getCustomerName();
         $dto->quantityOrdered = $order->getQuantityOrdered();
         $dto->orderStatus = $order->getStatus();
+
         return $dto;
     }
 
-    public function jsonSerialize(): array
+    /**
+     * @return string
+     */
+    public function getOrderId(): string
+    {
+        return $this->orderId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductId(): string
+    {
+        return $this->product['id'];
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuantityOrdered(): int
+    {
+        return $this->quantityOrdered;
+    }
+
+    public function toArray(): array
     {
         return [
             'orderId' => $this->orderId,
