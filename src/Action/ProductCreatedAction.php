@@ -22,7 +22,7 @@ final class ProductCreatedAction
 
         $product->setProductId($event->id);
         $product->setName($event->name);
-        $product->setPrice((int) $event->price);
+        $product->setPrice($event->price);
         $product->setQuantity($event->quantity);
 
         $this->em->persist($product);

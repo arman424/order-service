@@ -49,7 +49,11 @@ final class OrderCreateAction
         $order = new Order(Uuid::v4());
         $order->setProductId($product->getProductId());
         $order->setProductName($product->getName());
-        $order->setProductPrice((int)$product->getPrice());
+
+        // Price stored as integer to avoid floating-point precision issues.
+        // TODO: Consider using a dedicated Money object for more robust handling.
+
+        $order->setProductPrice((int) $product->getPrice());
         $order->setProductAvailableQuantityAtOrder($product->getQuantity());
         $order->setCustomerName($request->customerName);
         $order->setQuantityOrdered($request->quantityOrdered);

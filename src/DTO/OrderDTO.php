@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace App\DTO;
 
 use App\Entity\Order;
+use Symfony\Component\Uid\Uuid;
 
 final class OrderDTO
 {
-    public string $orderId;
+    public Uuid $orderId;
     public array $product;
     public string $customerName;
     public int $quantityOrdered;
@@ -17,9 +18,9 @@ final class OrderDTO
     {
         $dto = new self();
 
-        $dto->orderId = (string)$order->getId();
+        $dto->orderId = $order->getId();
         $dto->product = [
-            'id' => (string)$order->getProductId(),
+            'id' => $order->getProductId(),
             'name' => $order->getProductName(),
             'price' => $order->getProductPrice(),
             'quantity' => $order->getProductAvailableQuantityAtOrder(),
@@ -32,17 +33,17 @@ final class OrderDTO
     }
 
     /**
-     * @return string
+     * @return Uuid
      */
-    public function getOrderId(): string
+    public function getOrderId(): Uuid
     {
         return $this->orderId;
     }
 
     /**
-     * @return string
+     * @return Uuid
      */
-    public function getProductId(): string
+    public function getProductId(): Uuid
     {
         return $this->product['id'];
     }

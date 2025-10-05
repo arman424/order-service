@@ -12,15 +12,15 @@ use Symfony\Component\Uid\Uuid;
 class Product extends MappedProduct
 {
     #[ORM\Column(type: "uuid", unique: true)]
-    private ?Uuid $productId = null;
+    private Uuid $productId;
 
-    public function getProductId(): ?Uuid
+    public function getProductId(): Uuid
     {
         return $this->productId;
     }
 
-    public function setProductId(Uuid|string $productId): void
+    public function setProductId(Uuid $productId): void
     {
-        $this->productId = $productId instanceof Uuid ? $productId : Uuid::fromString($productId);
+        $this->productId = $productId;
     }
 }
