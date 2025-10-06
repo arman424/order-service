@@ -10,7 +10,9 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class ProductOutOfStockHandler
 {
-    public function __construct(private ProductOutOfStockAction $productOutOfStockAction) {}
+    public function __construct(
+        private readonly ProductOutOfStockAction $productOutOfStockAction
+    ) {}
 
     public function __invoke(ProductOutOfStockMessage $message): void
     {

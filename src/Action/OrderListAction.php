@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 final class OrderListAction
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
+        private readonly EntityManagerInterface $entityManager,
     ) {}
 
     public function __invoke(): JsonResponse

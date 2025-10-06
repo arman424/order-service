@@ -10,7 +10,9 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 final class ProductMessageHandler
 {
-    public function __construct(private ProductCreatedAction $productCreatedAction) {}
+    public function __construct(
+        private readonly ProductCreatedAction $productCreatedAction
+    ) {}
 
     public function __invoke(ProductMessage $message): void
     {

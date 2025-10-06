@@ -11,7 +11,7 @@ use Shared\Bundle\DTO\PublishedDTOInterface;
 final class ProductReservationAction
 {
     public function __construct(
-        private EntityManagerInterface $em,
+        private readonly EntityManagerInterface $em,
     ) {}
 
     public function __invoke(PublishedDTOInterface $event): void

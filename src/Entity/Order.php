@@ -117,16 +117,16 @@ class Order
     public function toArray(): array
     {
         return [
-            'orderId' => (string)$this->id,
+            'orderId' => $this->getId(),
             'product' => [
-                'id' => (string)$this->productId,
-                'name' => $this->productName,
-                'price' => $this->productPrice,
-                'quantity' => $this->productAvailableQuantityAtOrder,
+                'id' => $this->getProductId(),
+                'name' => $this->getProductName(),
+                'price' => $this->getProductPrice(),
+                'quantity' => $this->getProductAvailableQuantityAtOrder(),
             ],
-            'customerName' => $this->customerName,
-            'quantityOrdered' => $this->quantityOrdered,
-            'orderStatus' => $this->status,
+            'customerName' => $this->getCustomerName(),
+            'quantityOrdered' => $this->getQuantityOrdered(),
+            'orderStatus' => $this->getStatus(),
         ];
     }
 }

@@ -10,7 +10,9 @@ use Shared\Bundle\DTO\PublishedDTOInterface;
 
 final class ProductOutOfStockAction
 {
-    public function __construct(private EntityManagerInterface $em) {}
+    public function __construct(
+        private readonly EntityManagerInterface $em
+    ) {}
 
     public function __invoke(PublishedDTOInterface $event): void
     {

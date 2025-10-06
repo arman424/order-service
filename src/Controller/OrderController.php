@@ -10,34 +10,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 
 class OrderController extends AbstractController
 {
     public function __construct(
-        private OrderCreateAction $orderCreateAction,
-        private OrderListAction $orderListAction,
-        private OrderGetAction $orderGetAction
+        private readonly OrderCreateAction $orderCreateAction,
+        private readonly OrderListAction $orderListAction,
+        private readonly OrderGetAction $orderGetAction
     ) {}
 
     #[Route('/orders', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
-        try {
-            $order = ($this->orderCreateAction)($request->getContent());
-        } catch (ValidationFailedException $e) {
-            $errors = [];
-            foreach ($e->getViolations() as $violation) {
-                $errors[$violation->getPropertyPath()][] = $violation->getMessage();
-            }
-            return $this->json(['errors' => $errors], 422);
-        } catch (\InvalidArgumentException $e) {
-            return $this->json(['error' => $e->getMessage()], 400);
-        } catch (\Exception $e) {
-            return $this->json(['error' => 'Internal Server Error'], 500);
-        }
-
-        return $this->json($order->toArray(), 201);
+        return ($this->orderCreateAction)($request->getContent());
     }
 
     #[Route('/orders', methods: ['GET'])]
